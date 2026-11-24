@@ -18,7 +18,12 @@
 """
 
 import os
+from typing import Any
+
 from PIL import Image, ImageDraw, ImageFilter
+
+# Pillow ≥ 9.1 把重采样常量收进 Resampling 枚举；旧写法 Image.LANCZOS 在新版类型存根中不可见
+LANCZOS = Image.Resampling.LANCZOS
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "_src")
@@ -52,7 +57,8 @@ def prepare_background(src_name: str, dst_name: str, crop: float = 0.045, darken
 
     tw, th = CANVAS
     ratio = max(tw / im.width, th / im.height)
-    im = im.resize((int(im.width * ratio + 1), int(im.height * ratio + 1)), Image.LANCZOS)
+    scaled = (int(im.width * ratio + 1), int(im.height * ratio + 1))
+    im = im.resize(scaled, resample=LANCZOS)
     left = (im.width - tw) // 2
     top = (im.height - th) // 2
     im = im.crop((left, top, left + tw, top + th))
@@ -66,7 +72,12 @@ def prepare_background(src_name: str, dst_name: str, crop: float = 0.045, darken
 def build_logo() -> None:
     """白底 Logo 抠成透明底，并输出窗口图标与 exe 图标。"""
     im = Image.open(os.path.join(SRC, "logo_src.png")).convert("RGBA")
-    px = im.load()
+    raw_px = im.load()
+    if raw_px is None:  # load() 的存根可空，实际不会返回 None
+        raise RuntimeError("无法读取 logo_src.png 的像素数据")
+    # PixelAccess 的存根把 __getitem__ 声明为 float | int | tuple，按四元组解包会被判为不可迭代，
+    # 这里显式标成 Any：读写语义就是 RGBA 四元组
+    px: Any = raw_px
     corners = [(0, 0), (im.width - 1, 0), (0, im.height - 1), (im.width - 1, im.height - 1)]
     for corner in corners:
         ImageDraw.floodfill(im, corner, (0, 0, 0, 0), thresh=40)
@@ -85,11 +96,12 @@ def build_logo() -> None:
     canvas = Image.new("RGBA", (side, side), (0, 0, 0, 0))
     canvas.paste(im, ((side - im.width) // 2, (side - im.height) // 2), im)
 
-    logo = canvas.resize((512, 512), Image.LANCZOS)
+    logo = canvas.resize((512, 512), resample=LANCZOS)
     logo.save(os.path.join(IMG, "logo.png"), optimize=True)
     print("logo.png: 512x512")
 
-    canvas.resize((256, 256), Image.LANCZOS).save(os.path.join(ROOT, "assets", "icon.png"), optimize=True)
+    icon = canvas.resize((256, 256), resample=LANCZOS)
+    icon.save(os.path.join(ROOT, "assets", "icon.png"), optimize=True)
     canvas.save(
         os.path.join(ROOT, "assets", "icon.ico"),
         sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)],
