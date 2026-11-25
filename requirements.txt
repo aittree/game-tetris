@@ -1,0 +1,5 @@
+pygame>=2.5.2,<2.7
+pyinstaller>=6.3,<7
+pytest>=7.4
+pillow>=10.0        # 仅 tools/ 生成素材时需要，运行与打包不需要
+numpy>=1.26         # 仅 tools/ 生成音频时需要，运行与打包不需要
