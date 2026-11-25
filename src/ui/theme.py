@@ -34,13 +34,18 @@ CARD_RECTS = tuple((x, CARD_TOP, CARD_W, CARD_H) for x in CARD_XS)
 # —— 右侧面板分区 ——
 HOLD_BOX = (384, 136, 280, 164)
 HOLD_CENTER = (524, 216)
-NEXT_BOX = (384, 300, 280, 296)
-NEXT_FIRST_CENTER = (524, 430)
+NEXT_BOX = (384, 300, 280, 172)
+NEXT_FIRST_CENTER = (524, 404)
 NEXT_STEP = 56
-HINT_BOX = (384, 596, 280, 140)
-
-# —— 底部提示条 ——
-HINT_BAR_Y = 752
+HINT_BOX = (384, 476, 280, 260)
+HINT_COL_XS = (404, 532)
+HINT_ROW_YS = (532, 584, 636, 688)
+HINT_ITEMS = (
+    (("← →", "移动"), ("↓ / S", "软降")),
+    (("↑ / X", "顺时针"), ("Z", "逆时针")),
+    (("空格", "硬降"), ("C", "暂存")),
+    (("P / ESC", "暂停"), ("F11", "全屏")),
+)
 
 # —— 主菜单 ——
 MENU_BUTTON_RECTS = tuple((210, 360 + i * 68, 300, 56) for i in range(4))

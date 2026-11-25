@@ -18,12 +18,13 @@ from ..pieces import ROTATIONS
 from ..resource import resource_path
 from .effects import FLASH_MS, LAND_MS
 from .theme import (CARD_RECTS, CONFIRM_CANCEL, CONFIRM_CARD, CONFIRM_OK, ENTRY_CARD,
-                    ENTRY_NAME_BOX, FONT_SIZES, HINT_BAR_Y, HOLD_BOX, HOLD_CENTER,
-                    MENU_BUTTON_LABELS, MENU_BUTTON_RECTS, NEXT_BOX, NEXT_FIRST_CENTER,
-                    NEXT_STEP, OVERLAY_BUTTON_RECTS, OVERLAY_CARD, OVERLAY_OVER_LABELS,
-                    OVERLAY_PAUSE_LABELS, RANKING_BACK, RANKING_FIRST_Y, RANKING_HEADER_Y,
-                    RANKING_ROW_H, SETTINGS_BACK, SETTINGS_MINUS_X, SETTINGS_PLUS_X,
-                    SETTINGS_ROW_H, SETTINGS_ROW_YS, board_rect, cell_rect, piece_rgb)
+                    ENTRY_NAME_BOX, FONT_SIZES, HINT_COL_XS, HINT_ITEMS, HINT_ROW_YS,
+                    HOLD_BOX, HOLD_CENTER, MENU_BUTTON_LABELS, MENU_BUTTON_RECTS, NEXT_BOX,
+                    NEXT_FIRST_CENTER, NEXT_STEP, OVERLAY_BUTTON_RECTS, OVERLAY_CARD,
+                    OVERLAY_OVER_LABELS, OVERLAY_PAUSE_LABELS, RANKING_BACK,
+                    RANKING_FIRST_Y, RANKING_HEADER_Y, RANKING_ROW_H, SETTINGS_BACK,
+                    SETTINGS_MINUS_X, SETTINGS_PLUS_X, SETTINGS_ROW_H, SETTINGS_ROW_YS,
+                    board_rect, cell_rect, piece_rgb)
 
 _SPRITE_ORDER = ("I", "J", "L", "O", "S", "T", "Z", "ghost")
 
@@ -155,7 +156,6 @@ class Renderer:
         self._draw_land_marks(surf, effects, shake)
         self._draw_header(surf, snap)
         self._draw_panel(surf, snap)
-        self._draw_hint_bar(surf)
 
     def _draw_board_panel(self, surf: pygame.Surface) -> None:
         rect = board_rect()
@@ -243,30 +243,32 @@ class Renderer:
             self._text(surf, "—", FONT_SIZES["panel_value"], TEXT_SUB, HOLD_CENTER,
                        anchor="center")
 
-        pygame.draw.line(surf, GRID_COLOR, (404, HOLD_BOX[1] + HOLD_BOX[3] + 6),
-                         (644, HOLD_BOX[1] + HOLD_BOX[3] + 6))
-        self._text(surf, "下一个", FONT_SIZES["panel_title"], ACCENT, (404, 312), bold=True)
+        pygame.draw.line(surf, GRID_COLOR, (404, HOLD_BOX[1] + HOLD_BOX[3] + 2),
+                         (644, HOLD_BOX[1] + HOLD_BOX[3] + 2))
+        self._text(surf, "下一个", FONT_SIZES["panel_title"], ACCENT, (404, 316), bold=True)
         for i, piece_type in enumerate(snap.next_types):
             center = (NEXT_FIRST_CENTER[0], NEXT_FIRST_CENTER[1] + i * NEXT_STEP)
-            self._draw_preview(surf, piece_type, center, 30)
+            self._draw_preview(surf, piece_type, center, 32)
 
         pygame.draw.line(surf, GRID_COLOR, (404, NEXT_BOX[1] + NEXT_BOX[3] + 2),
                          (644, NEXT_BOX[1] + NEXT_BOX[3] + 2))
-        self._text(surf, "操作提示", FONT_SIZES["panel_title"], ACCENT, (404, 604), bold=True)
-        hints = (
-            "← →   移动",
-            "↑ / X  顺时针   Z  逆时针",
-            "空格   硬降",
-            "C   暂存      P / ESC   暂停",
-            "F11   窗口 / 全屏",
-        )
-        for i, line in enumerate(hints):
-            self._text(surf, line, FONT_SIZES["small"], TEXT_SUB, (404, 632 + i * 20))
+        self._text(surf, "操作提示", FONT_SIZES["panel_title"], ACCENT, (404, 490), bold=True)
+        for row, y in enumerate(HINT_ROW_YS):
+            for col, (key, desc) in enumerate(HINT_ITEMS[row]):
+                self._draw_key_hint(surf, key, desc, HINT_COL_XS[col], y)
 
-    def _draw_hint_bar(self, surf: pygame.Surface) -> None:
-        text = "← → 移动    ↑ 旋转    空格 硬降    C 暂存    P 暂停"
-        self._text(surf, text, FONT_SIZES["hint"], TEXT_SUB, (360, HINT_BAR_Y),
-                   anchor="midtop")
+    def _draw_key_hint(self, surf: pygame.Surface, key: str, desc: str,
+                       x: int, y: int) -> None:
+        """按键胶囊 + 中文说明，用于右侧操作提示的两列网格。"""
+        key_surface = self.font(FONT_SIZES["small"], True).render(key, True, ACCENT)
+        chip = pygame.Surface((key_surface.get_width() + 14, 22), pygame.SRCALPHA)
+        chip_rect = chip.get_rect()
+        pygame.draw.rect(chip, (12, 34, 50, 200), chip_rect, border_radius=6)
+        pygame.draw.rect(chip, (0, 229, 255, 70), chip_rect, width=1, border_radius=6)
+        surf.blit(chip, (x, y))
+        surf.blit(key_surface, (x + 7, y + (22 - key_surface.get_height()) // 2))
+        self._text(surf, desc, FONT_SIZES["small"], TEXT_SUB,
+                   (x + chip.get_width() + 8, y + 4))
 
     def _draw_preview(self, surf: pygame.Surface, piece_type: str,
                       center: tuple[int, int], cell: int,
