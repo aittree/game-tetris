@@ -5,7 +5,7 @@
 <h1 align="center">俄罗斯方块</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.1-52c41a?style=flat-square" alt="Version"/>
+  <img src="https://img.shields.io/badge/Version-1.0.0-52c41a?style=flat-square" alt="Version"/>
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/pygame-2.5%2B-2E7D32?style=flat-square" alt="pygame"/>
   <img src="https://img.shields.io/badge/PyInstaller-6.x-FFB300?style=flat-square" alt="PyInstaller"/>
@@ -112,10 +112,10 @@ pyinstaller tetris.spec --clean --noconfirm
 | 按键 | 作用 |
 | --- | --- |
 | ← → / A D | 左右移动（DAS 170 ms，之后每 40 ms 一格） |
-| ↓ / S | 软降（每格 +1 分） |
+| ↓ / S | 软降（不额外加分） |
 | ↑ / X | 顺时针旋转（SRS + 踢墙） |
 | Z | 逆时针旋转 |
-| 空格 | 硬降（每格 +2 分） |
+| 空格 | 硬降（不额外加分） |
 | C | 暂存 / 交换（每块一次） |
 | P / ESC | 暂停 / 继续 |
 | F11 | 窗口 / 全屏 |
@@ -141,7 +141,7 @@ pyinstaller tetris.spec --clean --noconfirm
 | 文件 | 内容 |
 | --- | --- |
 | `screenshots/start.png` | 主菜单界面 |
-| `screenshots/play.png` | 游戏进行中（含 HOLD / NEXT / 幽灵） |
+| `screenshots/play.png` | 游戏进行中（含暂存 / 下一个 / 幽灵） |
 | `screenshots/clear.png` | 一次消四行的瞬间 |
 | `screenshots/pause.png` | 暂停界面 |
 | `screenshots/gameover.png` | 游戏结束与登记入口 |
