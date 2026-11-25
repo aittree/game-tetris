@@ -32,10 +32,8 @@ LOCK_RESET_MAX = 15                 # 锁定延迟最多重置次数
 DAS_MS = 170                        # 按住方向键的首次延迟
 ARR_MS = 40                         # 之后的连发间隔
 SOFT_DROP_MS = 50                   # 按住 ↓ 的连发间隔
-NEXT_COUNT = 5                      # 预览数量
+NEXT_COUNT = 1                      # 预览数量
 
-SOFT_DROP_PER_CELL = 1
-HARD_DROP_PER_CELL = 2
 LINE_SCORES = {1: 100, 2: 300, 3: 500, 4: 800}
 
 MAX_NAME_LEN = 12                   # 排行榜昵称上限

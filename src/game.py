@@ -15,9 +15,8 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 from .board import Board
-from .config import (HARD_DROP_PER_CELL, HIDDEN_ROWS, LINE_SCORES, LOCK_DELAY_MS,
-                    LOCK_RESET_MAX, NEXT_COUNT, SOFT_DROP_PER_CELL, gravity_ms,
-                    level_from_lines)
+from .config import (HIDDEN_ROWS, LINE_SCORES, LOCK_DELAY_MS, LOCK_RESET_MAX,
+                    NEXT_COUNT, gravity_ms, level_from_lines)
 from .pieces import SPAWN_X, SPAWN_Y, Piece, SevenBag, kicks_for
 
 if TYPE_CHECKING:
@@ -152,7 +151,6 @@ class Game:
         elif action is Action.SOFT_DROP:
             if not self.board.collides(self.piece.cells(dy=-1)):
                 self.piece.y += 1
-                self.score += SOFT_DROP_PER_CELL
                 self.gravity_acc = 0.0
                 self._touch_lock()
                 self.events.append(GameEvent("move"))
@@ -261,8 +259,6 @@ class Game:
         while not self.board.collides(self.piece.cells(dy=-1)):
             self.piece.y += 1
             dist += 1
-        self.score += dist * HARD_DROP_PER_CELL
-        self.best = max(self.best, self.score)
         self.lock_active = False
         self.events.append(GameEvent("harddrop", {"dist": dist, "cells": self.piece.cells()}))
         self._lock()

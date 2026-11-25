@@ -106,7 +106,7 @@ def test_single_line_clear_and_score():
     game.handle(Action.HARD_DROP)
 
     assert game.lines == 1
-    assert game.score == 18 * 2 + 100     # 硬降 18 格 ×2 + 单行 100×1 级
+    assert game.score == 100              # 仅消行得分，硬降不加分
 
 
 def test_tetris_clear_scores_800():
@@ -118,7 +118,7 @@ def test_tetris_clear_scores_800():
     game.handle(Action.HARD_DROP)
 
     assert game.lines == 4
-    assert game.score == 18 * 2 + 800
+    assert game.score == 800              # 硬降不加分，只计四行 800×1 级
     assert "tetris" in kinds(game)
 
 

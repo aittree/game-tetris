@@ -235,7 +235,7 @@ class Renderer:
     def _draw_panel(self, surf: pygame.Surface, snap) -> None:
         panel = (384, 136, 280, 600)
         self._card(surf, panel, radius=16, alpha=190, border_alpha=110)
-        self._text(surf, "HOLD", FONT_SIZES["panel_title"], ACCENT, (404, 150), bold=True)
+        self._text(surf, "暂存", FONT_SIZES["panel_title"], ACCENT, (404, 150), bold=True)
         if snap.hold_type:
             self._draw_preview(surf, snap.hold_type, HOLD_CENTER, 22,
                                dim=snap.hold_used)
@@ -245,10 +245,10 @@ class Renderer:
 
         pygame.draw.line(surf, GRID_COLOR, (404, HOLD_BOX[1] + HOLD_BOX[3] + 6),
                          (644, HOLD_BOX[1] + HOLD_BOX[3] + 6))
-        self._text(surf, "NEXT", FONT_SIZES["panel_title"], ACCENT, (404, 312), bold=True)
+        self._text(surf, "下一个", FONT_SIZES["panel_title"], ACCENT, (404, 312), bold=True)
         for i, piece_type in enumerate(snap.next_types):
             center = (NEXT_FIRST_CENTER[0], NEXT_FIRST_CENTER[1] + i * NEXT_STEP)
-            self._draw_preview(surf, piece_type, center, 20, alpha=255 if i == 0 else 150)
+            self._draw_preview(surf, piece_type, center, 30)
 
         pygame.draw.line(surf, GRID_COLOR, (404, NEXT_BOX[1] + NEXT_BOX[3] + 2),
                          (644, NEXT_BOX[1] + NEXT_BOX[3] + 2))
@@ -399,11 +399,11 @@ class Renderer:
         self._text(surf, "昵称", FONT_SIZES["card_label"], TEXT_SUB,
                    (ENTRY_NAME_BOX[0], 342))
         self._card(surf, ENTRY_NAME_BOX, radius=10, alpha=235, border_alpha=200, width=2)
-        self._text(surf, name or "玩家", FONT_SIZES["panel_value"], TEXT_MAIN,
+        self._text(surf, name, FONT_SIZES["panel_value"], TEXT_MAIN,
                    (ENTRY_NAME_BOX[0] + 16, ENTRY_NAME_BOX[1] + 18))
 
         if preedit:
-            name_width = self.font(FONT_SIZES["panel_value"], False).size(name or "玩家")[0]
+            name_width = self.font(FONT_SIZES["panel_value"], False).size(name)[0]
             x = ENTRY_NAME_BOX[0] + 16 + name_width + 4
             self._text(surf, preedit, FONT_SIZES["panel_value"], ACCENT, (x, 388))
             preedit_width = self.font(FONT_SIZES["panel_value"], False).size(preedit)[0]
