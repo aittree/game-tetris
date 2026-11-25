@@ -136,15 +136,14 @@ pyinstaller tetris.spec --clean --noconfirm
 
 ## 七、游戏截图
 
-开发完成后按下列文件名放入 `screenshots/`，README 与文档中的引用即可直接生效：
+<p align="center">
+  <img src="screenshots/start.png" alt="主菜单界面" width="512">
+</p>
 
-| 文件 | 内容 |
-| --- | --- |
-| `screenshots/start.png` | 主菜单界面 |
-| `screenshots/play.png` | 游戏进行中（含暂存 / 下一个 / 幽灵） |
-| `screenshots/clear.png` | 一次消四行的瞬间 |
-| `screenshots/pause.png` | 暂停界面 |
-| `screenshots/gameover.png` | 游戏结束与登记入口 |
-| `screenshots/ranking.png` | 排行榜界面 |
+<p align="center">
+  <img src="screenshots/play.png" alt="游戏进行中" width="512">
+</p>
 
-> 截图建议：窗口模式 720×800 直接截取；全屏模式请截完整桌面后按 16:9 裁剪，避免拉伸。
+<p align="center">
+  <img src="screenshots/ranking.png" alt="排行榜界面" width="512">
+</p>
